@@ -1,0 +1,231 @@
+:root {
+  --bg-canvas: #f7f8fa;
+  --surface-white: #ffffff;
+  --tint-pink: #fceae8;
+  --accent-aqua: #1ecad3;
+  --accent-orangered: #f2542d;
+  --ink-dark: #1e1e24;
+  --ink-muted: #6e717a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(
+    circle at top left,
+    var(--tint-pink) 0%,
+    var(--bg-canvas) 45%,
+    rgba(30, 202, 211, 0.14) 100%
+  );
+  min-height: 100vh;
+  font-family:
+    Ubuntu, "Liberation Sans", Cantarell, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink-dark);
+  padding: 2.5rem 1rem;
+  overflow-x: hidden;
+}
+
+.app-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5rem;
+  margin-bottom: 1.5rem;
+}
+
+.app-logo {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+  filter: contrast(1.15) brightness(1.06);
+  mix-blend-mode: multiply;
+  transform: translateY(-15px);
+}
+
+.app-logocopy {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+
+  /* 1. BIG SCALE */
+  width: 1500px;
+  height: auto;
+
+  /* 2. POSITION AT THE BOTTOM (negative values push part of it off-screen) */
+  bottom: -1000px;
+  left: 0%;
+
+  /* 3. CROP TO SHOW ONLY A PART (top, right, bottom, left) */
+  clip-path: inset(0 0 0 0);
+
+  /* 4. BLEND SOFTLY WITH YOUR BACKGROUND */
+  mix-blend-mode: multiply;
+  opacity: 100;
+}
+
+.app-header h1 {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--ink-dark);
+  margin-bottom: 0;
+  margin-left: -50px;
+}
+
+/* Form & Filter Controls */
+.task-form {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.task-form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-form select,
+.task-form button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.task-form input,
+.task-form select,
+.filter-bar input,
+.filter-bar select {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(30, 30, 36, 0.12);
+  border-radius: 8px;
+  background-color: var(--bg-canvas);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--ink-dark);
+}
+
+.task-form input:focus,
+.filter-bar input:focus {
+  outline: 2px solid var(--accent-aqua);
+  border-color: transparent;
+}
+
+.task-form button {
+  padding: 0.65rem 1.3rem;
+  background-color: var(--accent-orangered);
+  color: var(--surface-white);
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-btn {
+  padding: 0.55rem 1.1rem;
+  background-color: var(--tint-pink);
+  color: var(--accent-orangered);
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+
+/* Task Cards - Full Bleed to Left Wall */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.task-card {
+  background-color: var(--tint-pink);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  margin-left: calc(-50vw + 50%);
+  padding: 1rem 1.25rem 1rem calc(50vw - 50% + 1.25rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Task Card Typography, Priority & Actions */
+.task-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink-dark);
+  margin-bottom: 0.25rem;
+}
+
+.task-card p {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.task-card.completed {
+  opacity: 0.65;
+}
+
+.task-card.completed h3 {
+  text-decoration: line-through;
+}
+
+.task-card button {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(30, 30, 36, 0.15);
+  border-radius: 6px;
+  background-color: var(--surface-white);
+  color: var(--ink-dark);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.task-card button:hover {
+  background-color: var(--accent-aqua);
+  color: var(--surface-white);
+  border-color: var(--accent-aqua);
+}
+
+.task-card .delete-btn:hover {
+  background-color: var(--accent-orangered);
+  border-color: var(--accent-orangered);
+}
