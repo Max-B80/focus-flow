@@ -23,7 +23,7 @@ export default function TaskForm({ onAddTask }) {
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
+    <form id="task-form" className="task-form" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Task title..."
@@ -44,7 +44,6 @@ export default function TaskForm({ onAddTask }) {
         <option value="Medium">Medium</option>
         <option value="Low">Low</option>
       </select>
-      <button type="submit">Add Task</button>
     </form>
   );
 }

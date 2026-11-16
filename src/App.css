@@ -7,7 +7,6 @@
   --ink-dark: #1e1e24;
   --ink-muted: #6e717a;
 }
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -39,7 +38,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 5rem;
+  padding-left: 10rem;
+  padding-top: 2rem;
   margin-bottom: 1.5rem;
 }
 
@@ -49,28 +49,47 @@ body {
   object-fit: contain;
   filter: contrast(1.15) brightness(1.06);
   mix-blend-mode: multiply;
-  transform: translateY(-15px);
+  transform-origin: right center;
+  transform: translateY(-0.5px) scale(1.8);
+}
+
+@keyframes gentleBounce {
+  0%, 100% {
+    transform: translate(-50%, 50%);
+  }
+  50% {
+    transform: translate(-50%, calc(50% - 16px));
+  }
 }
 
 .app-logocopy {
   position: fixed;
   z-index: 0;
   pointer-events: none;
-
-  /* 1. BIG SCALE */
-  width: 1500px;
-  height: auto;
-
-  /* 2. POSITION AT THE BOTTOM (negative values push part of it off-screen) */
-  bottom: -1000px;
-  left: 0%;
-
-  /* 3. CROP TO SHOW ONLY A PART (top, right, bottom, left) */
-  clip-path: inset(0 0 0 0);
-
-  /* 4. BLEND SOFTLY WITH YOUR BACKGROUND */
   mix-blend-mode: multiply;
-  opacity: 100;
+  filter: contrast(1.15) brightness(1.08);
+
+  /* 0 tasks -> center; 5 tasks -> bottom-right swoosh */
+  --progress: calc(var(--task-count, 5) / 5);
+
+  width: calc(130px + (1370px * var(--progress)));
+  height: auto;
+  bottom: calc(38% - ((38% + 1000px) * var(--progress)));
+  left: calc(50% - (50% * var(--progress)));
+  transform: translate(
+    calc(-50% * (1 - var(--progress))),
+    calc(50% * (1 - var(--progress)))
+  );
+
+  transition:
+    width 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    bottom 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    left 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app-logocopy.is-empty {
+  animation: gentleBounce 2s ease-in-out infinite;
 }
 
 .app-header h1 {
@@ -89,39 +108,153 @@ body {
   font-size: 2.8rem;
   font-weight: 800;
   color: var(--ink-dark);
-  margin-bottom: 0;
-  margin-left: -50px;
+  margin-bottom: -80px;
+  margin-left: -110px;
 }
 
 /* Form & Filter Controls */
-.task-form {
+.add-btn-row {
   display: flex;
-  flex-wrap: nowrap;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.add-task-btn {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background-color: var(--accent-orangered);
+  color: var(--surface-white);
+  border: none;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-task-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(242, 84, 45, 0.35);
+}
+
+
+.add-btn-drop-zone {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-drops {
+  position: relative;
+  width: 72px;
+  height: 48px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.drop {
+  position: absolute;
+  top: -18px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-orangered);
+  /* Classic teardrop shape pointing up */
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+  opacity: 0;
+  animation: dropFall 2.4s cubic-bezier(0.55, 0.06, 0.68, 0.19) infinite;
+}
+
+.drop.d1 {
+  left: 32px;
+  background-color: var(--accent-orangered);
+  animation-delay: 0s;
+}
+
+.drop.d2 {
+  left: 20px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-aqua);
+  animation-delay: 0.8s;
+}
+
+.drop.d3 {
+  left: 44px;
+  width: 7px;
+  height: 7px;
+  background-color: var(--accent-orangered);
+  animation-delay: 1.6s;
+}
+
+@keyframes dropFall {
+  0% {
+    transform: translateY(0) rotate(45deg) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  82% {
+    transform: translateY(58px) rotate(45deg) scale(1);
+    opacity: 0.95;
+  }
+  100% {
+    /* Dissolves right into the top of the circular button */
+    transform: translateY(66px) rotate(45deg) scale(0.2);
+    opacity: 0;
+  }
+}
+.controls-grid {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
+.task-form {
+  display: contents;
+}
+
 .task-form input {
   flex: 1;
-  min-width: 0;
+  min-width: 150px;
 }
 
 .task-form select,
-.task-form button {
+.status-select {
   flex-shrink: 0;
-  white-space: nowrap;
 }
 
 .filter-bar {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.filter-bar input {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-bar select {
+  flex-shrink: 0;
 }
 
 .task-form input,
 .task-form select,
+.status-select,
 .filter-bar input,
 .filter-bar select {
   padding: 0.65rem 0.9rem;
@@ -137,17 +270,6 @@ body {
 .filter-bar input:focus {
   outline: 2px solid var(--accent-aqua);
   border-color: transparent;
-}
-
-.task-form button {
-  padding: 0.65rem 1.3rem;
-  background-color: var(--accent-orangered);
-  color: var(--surface-white);
-  border: none;
-  border-radius: 8px;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
 }
 
 .clear-btn {
@@ -172,6 +294,7 @@ body {
 
 .task-card {
   background-color: var(--tint-pink);
+  backdrop-filter: blur(6px);
   border-left: none;
   border-radius: 0 12px 12px 0;
   margin-left: calc(-50vw + 50%);

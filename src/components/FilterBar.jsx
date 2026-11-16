@@ -7,15 +7,9 @@ export default function FilterBar({
   onPriorityChange,
 }) {
   return (
-    <div className="filter-bar">
-      <input
-        type="text"
-        placeholder="Search tasks..."
-        value={searchQuery}
-        onChange={(e) => onSearchChange(e.target.value)}
-      />
-
+    <>
       <select
+        className="status-select"
         value={statusFilter}
         onChange={(e) => onStatusChange(e.target.value)}
       >
@@ -24,15 +18,24 @@ export default function FilterBar({
         <option value="Completed">Completed</option>
       </select>
 
-      <select
-        value={priorityFilter}
-        onChange={(e) => onPriorityChange(e.target.value)}
-      >
-        <option value="All">All Priorities</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-    </div>
+      <div className="filter-bar">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
+
+        <select
+          value={priorityFilter}
+          onChange={(e) => onPriorityChange(e.target.value)}
+        >
+          <option value="All">All Priorities</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+    </>
   );
 }
